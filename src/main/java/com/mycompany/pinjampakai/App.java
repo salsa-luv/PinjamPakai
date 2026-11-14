@@ -1,111 +1,228 @@
+
 package com.mycompany.pinjampakai;
 
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.control.Button;
+import javafx.scene.control.Alert;
+import javafx.scene.layout.VBox;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.geometry.Insets;
 
-import java.io.IOException;
+public class App extends Application {
 
-/**
- * JavaFX App
- */
+    @Override
+    public void start(Stage stage) {
 
-import java.util.Scanner;
+        // Judul aplikasi
+        Label judul = new Label("SISTEM PINJAMPAKAI");
+        Label subjudul = new Label("Peminjaman Barang dan Ruangan");
 
-public class App {
-    public static void main(String[] args) {
-        Scanner input = new Scanner(System.in);
+        // Form data peminjam
+        Label labelNama = new Label("Nama Peminjam");
+        TextField inputNama = new TextField();
 
-        // Membuat objek fasilitas
-        Barang barang1 = new Barang(
-            "B001", "Proyektor", "Tersedia", 2
-        );
+        Label labelTujuan = new Label("Tujuan Peminjaman");
+        TextField inputTujuan = new TextField();
 
-        Barang barang2 = new Barang(
-            "B002", "Kabel HDMI", "Tersedia", 5
-        );
+        // Pilihan jenis fasilitas
+        Label labelJenis = new Label("Pilih Jenis Fasilitas");
+        Button tombolBarang = new Button("Barang");
+        Button tombolRuangan = new Button("Ruangan");
 
-        Ruangan ruangan1 = new Ruangan(
-            "R001", "Ruang Seminar", "Tersedia", 40
-        );
+        Label pilihanJenis = new Label("Belum dipilih");
 
-        Ruangan ruangan2 = new Ruangan(
-            "R002", "Ruang Rapat", "Tersedia", 20
-        );
+        // Pilihan nama fasilitas
+        Label labelFasilitas = new Label("Pilih Nama Fasilitas");
+        Label pilihanFasilitas = new Label("Belum dipilih");
 
-        int pilihan;
+        Button tombolProyektor = new Button("Proyektor");
+        Button tombolHDMI = new Button("Kabel HDMI");
+        Button tombolSeminar = new Button("Ruang Seminar");
+        Button tombolRapat = new Button("Ruang Rapat");
 
-        System.out.println("==================================");
-        System.out.println("       SISTEM PINJAMPAKAI");
-        System.out.println(" Peminjaman Barang dan Ruangan");
-        System.out.println("==================================");
+        // Awalnya pilihan fasilitas belum aktif
+        tombolProyektor.setDisable(true);
+        tombolHDMI.setDisable(true);
+        tombolSeminar.setDisable(true);
+        tombolRapat.setDisable(true);
 
-        while (true) {
-            System.out.println("\nMENU UTAMA");
-            System.out.println("1. Lihat Daftar Fasilitas");
-            System.out.println("2. Ajukan Peminjaman");
-            System.out.println("3. Keluar");
-            System.out.print("Pilih menu: ");
+        // Input jumlah barang
+        Label labelJumlah = new Label("Jumlah Barang");
+        TextField inputJumlah = new TextField();
+        inputJumlah.setPromptText("Isi jumlah barang");
 
-            pilihan = input.nextInt();
-            input.nextLine();
+        // Tombol jenis fasilitas
+        tombolBarang.setOnAction(event -> {
+            pilihanJenis.setText("Barang");
+            pilihanFasilitas.setText("Belum dipilih");
 
-            switch (pilihan) {
-                case 1:
-                    System.out.println("\nDAFTAR BARANG");
-                    barang1.tampilkanInfo();
-                    System.out.println("--------------------------");
-                    barang2.tampilkanInfo();
+            tombolProyektor.setDisable(false);
+            tombolHDMI.setDisable(false);
+            tombolSeminar.setDisable(true);
+            tombolRapat.setDisable(true);
+        });
 
-                    System.out.println("\nDAFTAR RUANGAN");
-                    ruangan1.tampilkanInfo();
-                    System.out.println("--------------------------");
-                    ruangan2.tampilkanInfo();
-                    break;
+        tombolRuangan.setOnAction(event -> {
+            pilihanJenis.setText("Ruangan");
+            pilihanFasilitas.setText("Belum dipilih");
 
-                case 2:
-                    System.out.println("\nJENIS FASILITAS");
-                    System.out.println("1. Barang");
-                    System.out.println("2. Ruangan");
-                    System.out.print("Pilih jenis fasilitas: ");
+            tombolProyektor.setDisable(true);
+            tombolHDMI.setDisable(true);
+            tombolSeminar.setDisable(false);
+            tombolRapat.setDisable(false);
+        });
 
-                    int jenis = input.nextInt();
-                    input.nextLine();
+        // Tombol pilihan fasilitas
+        tombolProyektor.setOnAction(event -> {
+            pilihanFasilitas.setText("Proyektor");
+        });
 
-                    if (jenis == 1 || jenis == 2) {
-                        System.out.print("Masukkan nama peminjam: ");
-                        String nama = input.nextLine();
+        tombolHDMI.setOnAction(event -> {
+            pilihanFasilitas.setText("Kabel HDMI");
+        });
 
-                        System.out.print("Masukkan tujuan peminjaman: ");
-                        String tujuan = input.nextLine();
+        tombolSeminar.setOnAction(event -> {
+            pilihanFasilitas.setText("Ruang Seminar");
+        });
 
-                        System.out.println("\nPENGAJUAN PEMINJAMAN");
-                        System.out.println("Nama Peminjam : " + nama);
-                        System.out.println("Tujuan        : " + tujuan);
+        tombolRapat.setOnAction(event -> {
+            pilihanFasilitas.setText("Ruang Rapat");
+        });
 
-                        if (jenis == 1) {
-                            System.out.println("Jenis         : Barang");
-                        } else {
-                            System.out.println("Jenis         : Ruangan");
+        // Tombol pengajuan
+        Button tombolAjukan = new Button("Ajukan Peminjaman");
+
+        tombolAjukan.setOnAction(event -> {
+
+            String nama = inputNama.getText().trim();
+            String tujuan = inputTujuan.getText().trim();
+            String jenis = pilihanJenis.getText();
+            String fasilitas = pilihanFasilitas.getText();
+
+            // Validasi data
+            if (nama.isEmpty() || tujuan.isEmpty()
+                    || jenis.equals("Belum dipilih")
+                    || fasilitas.equals("Belum dipilih")) {
+
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Peringatan");
+                alert.setHeaderText("Data Belum Lengkap");
+                alert.setContentText(
+                    "Silakan lengkapi semua data pengajuan!"
+                );
+                alert.showAndWait();
+
+            } else {
+
+                String jumlah = "-";
+
+                // Validasi jumlah barang
+                if (jenis.equals("Barang")) {
+
+                    try {
+                        int nilaiJumlah = Integer.parseInt(
+                            inputJumlah.getText().trim()
+                        );
+
+                        if (nilaiJumlah <= 0) {
+                            throw new NumberFormatException();
                         }
 
-                        System.out.println("Status        : Menunggu Persetujuan");
-                        System.out.println("Pengajuan berhasil dicatat.");
-                    } else {
-                        System.out.println("Pilihan jenis fasilitas tidak valid.");
+                        jumlah = String.valueOf(nilaiJumlah);
+
+                    } catch (NumberFormatException e) {
+
+                        Alert alert = new Alert(Alert.AlertType.WARNING);
+                        alert.setTitle("Peringatan");
+                        alert.setHeaderText("Jumlah Tidak Valid");
+                        alert.setContentText(
+                            "Masukkan jumlah barang berupa angka lebih dari 0!"
+                        );
+                        alert.showAndWait();
+
+                        return;
                     }
-                    break;
+                }
 
-                case 3:
-                    System.out.println("\nTerima kasih telah menggunakan PinjamPakai.");
-                    input.close();
-                    return;
+                // Menampilkan hasil pengajuan
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Pengajuan Berhasil");
+                alert.setHeaderText("Data Peminjaman Berhasil Dicatat");
 
-                default:
-                    System.out.println("Pilihan menu tidak valid.");
+                alert.setContentText(
+                    "Nama Peminjam : " + nama +
+                    "\nTujuan : " + tujuan +
+                    "\nJenis Fasilitas : " + jenis +
+                    "\nNama Fasilitas : " + fasilitas +
+                    "\nJumlah : " + jumlah +
+                    "\nStatus : Menunggu Persetujuan"
+                );
+
+                alert.showAndWait();
             }
-        }
+        });
+
+        // Mengatur form menggunakan GridPane
+        GridPane form = new GridPane();
+        form.setHgap(10);
+        form.setVgap(12);
+
+        form.add(labelNama, 0, 0);
+        form.add(inputNama, 1, 0);
+
+        form.add(labelTujuan, 0, 1);
+        form.add(inputTujuan, 1, 1);
+
+        // Layout pilihan fasilitas
+        HBox pilihanJenisBox = new HBox(10);
+        pilihanJenisBox.getChildren().addAll(
+            tombolBarang, tombolRuangan
+        );
+
+        HBox pilihanBarangBox = new HBox(10);
+        pilihanBarangBox.getChildren().addAll(
+            tombolProyektor, tombolHDMI
+        );
+
+        HBox pilihanRuanganBox = new HBox(10);
+        pilihanRuanganBox.getChildren().addAll(
+            tombolSeminar, tombolRapat
+        );
+
+        // Mengatur tampilan utama
+        VBox layout = new VBox(12);
+        layout.setPadding(new Insets(25));
+
+        layout.getChildren().addAll(
+            judul,
+            subjudul,
+            form,
+            labelJenis,
+            pilihanJenisBox,
+            pilihanJenis,
+            labelFasilitas,
+            pilihanBarangBox,
+            pilihanRuanganBox,
+            pilihanFasilitas,
+            labelJumlah,
+            inputJumlah,
+            tombolAjukan
+        );
+
+        // Membuat jendela aplikasi
+        Scene scene = new Scene(layout, 500, 550);
+
+        stage.setTitle("PinjamPakai");
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public static void main(String[] args) {
+        launch(args);
     }
 }
